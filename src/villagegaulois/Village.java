@@ -44,7 +44,10 @@ public class Village {
 		return null;
 	}
 
-	public String afficherVillageois() {
+	public String afficherVillageois() throws VillageSansChefException {
+		if (chef == null) {
+			throw new VillageSansChefException("Le village n'a pas de chef !");
+		}
 		StringBuilder chaine = new StringBuilder();
 		if (nbVillageois < 1) {
 			chaine.append("Il n'y a encore aucun habitant au village du chef "
@@ -129,8 +132,8 @@ public class Village {
 		 public Etal[] trouverEtals(String produit) {
 			 Etal[] etalsProduit = new Etal[etals.length];
 			 for (int i=0; i<etals.length; i++) {
-				 if (etals[i].contientProduit(produit)) {
-					 etalsProduit[i] = etals[i];
+				 if (etals[i]!=null && etals[i].contientProduit(produit)) {
+						 etalsProduit[i] = etals[i];
 				 }
 			 }
 			 return etalsProduit;
