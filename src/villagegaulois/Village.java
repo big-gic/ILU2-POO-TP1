@@ -14,6 +14,9 @@ public class Village {
 		this.nom = nom;
 		villageois = new Gaulois[nbVillageoisMaximum];
 		marche = new Marche(nbetals);
+		for(int i = 0; i < nbetals;  i++) {
+			this.marche.etals[i] = new Etal();
+		}
 	}	
 
 	public String getNom() {
@@ -73,20 +76,28 @@ public class Village {
 	}
 	
 	public String rechercherVendeursProduit(String produit) {
-		StringBuilder chaine = new StringBuilder();
-		Etal[] etalsProduit = marche.trouverEtals(produit);
-		if (etalsProduit.length==0) {
-			chaine.append("Il n'y a pas de vendeur qui propose des "+produit+" au march�.");
-		}else if(etalsProduit.length==1){
-			chaine.append("Seul le vendeur "+etalsProduit[0].getVendeur()+" propose des fleurs au march�.");
-		}else {
-			chaine.append("Les vendeurs qui proposent des fleurs sont :");
-			for (int i = 0; i < etalsProduit.length; i++) {
-				chaine.append("\n- "+etalsProduit[i].getVendeur().getNom());
-			}
-		}
-		return chaine.toString();
-	}
+		 StringBuilder chaine = new StringBuilder();
+		 String nom = "\n";
+		 int prod = 0;
+		 if(marche.etals != null) {
+			 for(int i = 0; i < marche.etals.length; i++) {
+				 if(marche.etals[i].isEtalOccupe() && marche.etals[i].contientProduit(produit)) {
+					 prod += 1;
+					 nom += "- " + marche.etals[i].getVendeur().getNom() + "\n";
+				 }
+			 }
+			 if(prod == 0) {
+				 chaine.append("Il n'y a pas de vendeur qui propose des fleurs au marché.\n");
+			 }
+			 else if(prod == 1) {
+				 chaine.append("Seul le vendeur " + nom + " propose des fleurs au marché.\n");
+			 }
+			 else {
+				 chaine.append("Les vendeurs qui proposent des fleurs sont :" + nom + "\n");
+			 }
+		 }
+		 return chaine.toString();
+	 }
 	
 	public Etal rechercherEtal(Gaulois vendeur) {
 		return marche.trouverVendeur(vendeur);
@@ -132,7 +143,7 @@ public class Village {
 		 public Etal[] trouverEtals(String produit) {
 			 Etal[] etalsProduit = new Etal[etals.length];
 			 for (int i=0; i<etals.length; i++) {
-				 if (etals[i]!=null && etals[i].contientProduit(produit)) {
+				 if (etals[i].contientProduit(produit)) {
 						 etalsProduit[i] = etals[i];
 				 }
 			 }
